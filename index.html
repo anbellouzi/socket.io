@@ -12,27 +12,83 @@
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
       #messages { margin-bottom: 40px }
+
+      .hide {
+        display: none;
+      }
+
+      .show {
+        display: inline;
+      }
+
+      .username-form form {
+        height: 50%;
+
+      }
+
+      .username-form  {
+        background-color: white;
+
+      }
+
     </style>
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+
+    <div class="chat-container">
+      <ul id="messages"></ul>
+      <form action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
+    <div class="username-form">
+      Your Name?
+      <form action="">
+        <input id="user" autocomplete="off" /><button id="join-button">Join</button>
+      </form>
+
+
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       $(function () {
+
+        
         var socket = io();
         $('form').submit(function(){
           socket.emit('chat message', $('#m').val());
           $('#m').val('');
           return false;
         });
+
+        $('#join-button').click((e)=>{
+          e.preventDefault();
+          if($('#user').val().length > 0){
+            socket.emit('new user', $('#user').val());
+            // Save the current user when created
+            
+            currentUser = $('#user').val();
+            console.log(currentUser)
+            $('.username-form').removeClass('show');
+            $('.username-form').addClass('hide');
+            $('.chat-container').removeClass('hide');
+            $('.chat-container').addClass('show');
+          }
+        });
+
         socket.on('chat message', function(msg){
           $('#messages').append($('<li>').text(msg));
           window.scrollTo(0, document.body.scrollHeight);
         });
+
+        socket.on('new user', (username) => {
+          $('#messages').append($('<li>').text(username+" has joined!"));
+        });
+
+
+
       });
     </script>
   </body>
