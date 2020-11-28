@@ -36,6 +36,7 @@
   <body>
 
     <div class="chat-container">
+      <div class="online-users">Online Users</div>
       <ul id="messages"></ul>
       <form action="">
         <input id="m" autocomplete="off" /><button>Send</button>
@@ -56,6 +57,8 @@
       $(function () {
 
         let currentUser;
+        let typing = false;
+
         
         var socket = io();
         $('form').submit(function(){
@@ -79,21 +82,63 @@
           }
         });
 
-        socket.on('chat message', function(msg){
-          $('#messages').append($('<li>').text(currentUser+": "+msg));
+
+        $('#user').on("input", function() {
+          
+          if (typing) {
+            console.log("start typing")
+            socket.emit('start typing');
+          }
+          typing = true;
+          
+        });
+
+        $("#user").keyup(function() {
+
+          if (this.value == ""  && typing == true) {
+
+            console.log("end typing")
+            socket.emit('end typing');
+          }
+
+          typing = false
+
+        });
+
+        socket.on('chat message', function(msg, user){
+          $('#messages').append($('<li>').text(user+": "+msg));
         });
 
         socket.on('new user', (username) => {
           $('#messages').append($('<li>').text(username+" has joined!"));
+          socket.emit('get online users');
         });
 
-        //Refresh the online user list
         socket.on('user has left', (username) => {
           if (username != null) {
             $('#messages').append($('<li>').text(username+" has left!"));
             window.scrollTo(0, document.body.scrollHeight);
           } 
         });
+        
+        socket.on('start typing', (username) => {
+            $('#messages').append($("<li id="+username+">").text(username+" is typing..."));
+        });
+
+        socket.on('end typing', (username) => {
+          tpying = 0
+          console.log('end typig')
+          $('#username').remove();
+        });
+
+        socket.on('get online users', (onlineUsers) => {
+        //You may have not have seen this for loop before. It's syntax is for(key in obj)
+        //Our usernames are keys in the object of onlineUsers.
+        console.log("getting users")
+        for(username in onlineUsers){
+          $('.online-users').append(`<div class="user-online">${username} Active</div>`);
+        }
+    })
 
       });
     </script>

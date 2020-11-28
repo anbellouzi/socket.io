@@ -13,8 +13,10 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
 
+  
+
   socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+    io.emit('chat message', msg, socket.username);
   });
 
 
@@ -34,6 +36,21 @@ io.on('connection', function(socket){
     delete onlineUsers[socket.username]
     io.emit('user has left', socket.username);
   });
+
+  socket.on('start typing', () => {
+    //This deletes the user by using the username we saved to the socket
+    io.emit('start typing', socket.username);
+  });
+
+  socket.on('end typing', () => {
+    //This deletes the user by using the username we saved to the socket
+    io.emit('end typing', socket.username);
+  });
+
+  socket.on('get online users', () => {
+    //Send over the onlineUsers
+    socket.emit('get online users', onlineUsers);
+  })
 
 });
 
