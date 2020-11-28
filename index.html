@@ -87,7 +87,13 @@
           $('#messages').append($('<li>').text(username+" has joined!"));
         });
 
-
+        //Refresh the online user list
+        socket.on('user has left', (username) => {
+          if (username != null) {
+            $('#messages').append($('<li>').text(username+" has left!"));
+            window.scrollTo(0, document.body.scrollHeight);
+          } 
+        });
 
       });
     </script>

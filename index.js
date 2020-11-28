@@ -12,6 +12,7 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
+
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
@@ -27,6 +28,12 @@ io.on('connection', function(socket){
       // channels : channels,
     });
   })
+
+  socket.on('disconnect', () => {
+    //This deletes the user by using the username we saved to the socket
+    delete onlineUsers[socket.username]
+    io.emit('user has left', socket.username);
+  });
 
 });
 
