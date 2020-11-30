@@ -4,10 +4,28 @@ This is the source code for a very simple chat example used for
 the [Getting Started](http://socket.io/get-started/chat/) guide
 of the Socket.IO website.
 
-Please refer to it to learn how to run this application.
+## Features
 
-You can also spin up a free Heroku dyno to test it out:
+* Join Chat
+* Create nickname
+* Send messages
+* Get notify when user joins or leaves chat
+* See online users
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/socketio/chat-example)
+## Installation
 
-Besides, the application is deployed on [Now](https://zeit.co/now): https://socketio-chat-example.now.sh/
+
+
+```bash
+git clone https://github.com/anbellouzi/socket.io.git
+git checkout master
+cd socket.io
+node install
+```
+
+## Usage
+
+```bash
+  Usage
+    $ nodemon
+```
