@@ -83,27 +83,27 @@
         });
 
 
-        $('#user').on("input", function() {
+        // $('#user').on("input", function() {
           
-          if (typing) {
-            console.log("start typing")
-            socket.emit('start typing');
-          }
-          typing = true;
+        //   if (typing) {
+        //     console.log("start typing")
+        //     socket.emit('start typing');
+        //   }
+        //   typing = true;
           
-        });
+        // });
 
-        $("#user").keyup(function() {
+        // $("#user").keyup(function() {
 
-          if (this.value == ""  && typing == true) {
+        //   if (this.value == ""  && typing == true) {
 
-            console.log("end typing")
-            socket.emit('end typing');
-          }
+        //     console.log("end typing")
+        //     socket.emit('end typing');
+        //   }
 
-          typing = false
+        //   typing = false
 
-        });
+        // });
 
         socket.on('chat message', function(msg, user){
           $('#messages').append($('<li>').text(user+": "+msg));
